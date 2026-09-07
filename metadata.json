@@ -1,0 +1,6 @@
+{
+  "name": "ScanPanan",
+  "description": "Live Game Win Rate Optimization & AI Analytics System with real-time target scanner and calibration engine",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

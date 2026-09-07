@@ -2,19 +2,73 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ScanPanan - Live Production Dashboard</title>
+    <meta name="description" content="ScanPanan - Live Game Win Rate Optimization & AI Analytics System with real-time target scanner and calibration engine">
+    <meta property="og:title" content="ScanPanan - Live Production Dashboard">
+    <meta property="og:description" content="ScanPanan - Live Game Win Rate Optimization & AI Analytics System with real-time target scanner and calibration engine">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #090d16; color: #e2e8f0; margin: 0; padding: 30px; }
-        .wrapper { max-width: 900px; margin: auto; background: #111827; padding: 40px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.7); border: 1px solid #1f2937; }
-        h1 { color: #38bdf8; text-align: center; margin-bottom: 5px; }
-        p.subtitle { text-align: center; color: #94a3b8; margin-bottom: 30px; }
-        .card { background: #1f2937; padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #374151; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #cbd5e1; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; background: #0b0f19; border: 1px solid #4b5563; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 15px; }
-        button { background: linear-gradient(135deg, #0284c7, #0369a1); color: white; border: none; padding: 14px 20px; width: 100%; border-radius: 8px; font-size: 17px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: linear-gradient(135deg, #0369a1, #075985); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4); }
-        pre { background: #090d16; padding: 20px; border-radius: 8px; overflow-x: auto; color: #4ade80; border: 1px solid #1e293b; font-family: 'Courier New', Courier, monospace; }
-        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; background: #065f46; color: #34d399; font-weight: bold; margin-bottom: 15px; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #090d16; color: #e2e8f0; margin: 0; padding: 24px 16px; }
+        .wrapper { max-width: 1100px; margin: auto; background: #111827; padding: 32px 24px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.7); border: 1px solid #1f2937; }
+        h1 { color: #38bdf8; text-align: center; margin-bottom: 5px; font-size: 28px; }
+        p.subtitle { text-align: center; color: #94a3b8; margin-bottom: 25px; font-size: 15px; }
+        .card { background: #1f2937; padding: 22px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #374151; }
+        .card-header-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+        .card-header-row h3 { margin: 0; font-size: 17px; color: #f1f5f9; display: flex; align-items: center; gap: 8px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #cbd5e1; font-size: 14px; }
+        input[type="text"], input[type="number"] { width: 100%; padding: 12px; margin-bottom: 15px; background: #0b0f19; border: 1px solid #4b5563; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 15px; }
+        input:focus { border-color: #38bdf8; outline: none; box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2); }
+        .main-btn { background: linear-gradient(135deg, #0284c7, #0369a1); color: white; border: none; padding: 14px 20px; width: 100%; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .main-btn:hover { background: linear-gradient(135deg, #0369a1, #075985); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4); }
+        pre { background: #090d16; padding: 18px; border-radius: 8px; overflow-x: auto; color: #4ade80; border: 1px solid #1e293b; font-family: 'Courier New', Courier, monospace; font-size: 13px; line-height: 1.5; margin: 0; }
+        .status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 20px; font-size: 12px; background: #065f46; color: #34d399; font-weight: bold; }
+
+        /* Real Web Browser Mockup Styles */
+        .browser-mockup { border: 1px solid #334155; border-radius: 12px; overflow: hidden; background: #0f172a; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65); display: flex; flex-direction: column; }
+        .browser-topbar { background: #1e293b; display: flex; align-items: center; padding: 10px 16px 0 16px; border-bottom: 1px solid #334155; user-select: none; }
+        .window-controls { display: flex; gap: 8px; margin-right: 16px; padding-bottom: 8px; }
+        .win-btn { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        .win-close { background: #ef4444; }
+        .win-min { background: #f59e0b; }
+        .win-max { background: #10b981; }
+        .browser-tabs { display: flex; align-items: flex-end; overflow-x: auto; scrollbar-width: none; }
+        .browser-tab { background: #0f172a; color: #f8fafc; border: 1px solid #334155; border-bottom: none; border-radius: 8px 8px 0 0; padding: 7px 14px; font-size: 12px; display: inline-flex; align-items: center; gap: 8px; max-width: 280px; white-space: nowrap; }
+        .tab-favicon { font-size: 13px; }
+        .tab-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px; font-weight: 500; }
+        .tab-close { font-size: 11px; color: #94a3b8; margin-left: 4px; }
+        
+        /* Browser Navigation Bar */
+        .browser-toolbar { background: #0f172a; padding: 9px 14px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #1e293b; flex-wrap: wrap; }
+        .nav-actions { display: flex; gap: 6px; }
+        .tool-btn { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 6px; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; text-decoration: none; transition: 0.2s; padding: 0; }
+        .tool-btn:hover { background: #334155; color: #fff; }
+        .address-bar-wrapper { flex: 1; min-width: 240px; display: flex; align-items: center; background: #090d16; border: 1px solid #334155; border-radius: 8px; padding: 2px 8px; gap: 8px; }
+        .ssl-icon { font-size: 13px; color: #10b981; }
+        #browserAddressBar { flex: 1; background: transparent; border: none; color: #f1f5f9; font-size: 13px; padding: 6px 4px; margin: 0; font-family: monospace; outline: none; }
+        .go-btn { background: #0284c7; color: white; border: none; border-radius: 6px; padding: 5px 12px; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .go-btn:hover { background: #0369a1; }
+        .browser-tools { display: flex; align-items: center; gap: 8px; }
+        .mode-toggle { display: flex; background: #1e293b; border-radius: 6px; padding: 2px; border: 1px solid #334155; }
+        .tool-toggle { background: transparent; border: none; color: #94a3b8; padding: 4px 10px; font-size: 12px; border-radius: 4px; cursor: pointer; transition: 0.2s; }
+        .tool-toggle.active { background: #0284c7; color: #fff; font-weight: bold; }
+
+        /* Integrated AI HUD Bar */
+        .browser-ai-hud { background: linear-gradient(90deg, #091a2e 0%, #0c2438 100%); border-bottom: 1px solid rgba(56, 189, 248, 0.2); padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: #94a3b8; flex-wrap: wrap; gap: 8px; }
+        .hud-left { display: flex; align-items: center; gap: 8px; }
+        .hud-pulse { width: 8px; height: 8px; border-radius: 50%; background: #38bdf8; display: inline-block; box-shadow: 0 0 8px #38bdf8; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .hud-right { display: flex; align-items: center; gap: 6px; }
+        .hud-rate-pill { background: #065f46; color: #34d399; padding: 2px 10px; border-radius: 12px; font-weight: bold; font-family: monospace; font-size: 13px; border: 1px solid #10b981; }
+
+        /* Viewport Screen */
+        .browser-screen-container { width: 100%; min-height: 520px; height: 580px; background: #090d16; display: flex; justify-content: center; align-items: stretch; overflow: hidden; transition: all 0.3s ease; }
+        .browser-screen-container iframe { width: 100%; height: 100%; border: none; background: #090d16; display: block; }
+        .browser-screen-container.mobile-mode { padding: 20px 0; background: #050811; align-items: center; }
+        .browser-screen-container.mobile-mode iframe { width: 375px; height: 540px; border-radius: 28px; border: 8px solid #334155; box-shadow: 0 0 30px rgba(0, 0, 0, 0.9); }
+
+        /* Footer */
+        .browser-footer { background: #1e293b; padding: 6px 14px; font-size: 11px; color: #64748b; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #334155; }
     </style>
 </head>
 <body>
@@ -22,33 +76,190 @@
     <h1>ScanPanan Production System</h1>
     <p class="subtitle">ระบบสแกน วิเคราะห์ และปรับปรุงอัตราชนะแบบเรียลไทม์ (Live Engine)</p>
 
-    <div class="card">
-        <span class="status-badge">API Connected</span>
-        <label>เป้าหมาย URL (Target Endpoint):</label>
+    <div class="card" id="controlCard">
+        <span class="status-badge" id="apiBadge">API Connected</span>
+        <label for="targetUrl">เป้าหมาย URL (Target Endpoint):</label>
         <input type="text" id="targetUrl" value="https://example.com/game-lobby">
 
-        <label>อัตราชนะที่ต้องการ (%) [Target Win Rate]:</label>
-        <input type="number" id="targetRate" value="92.5" step="0.1">
+        <label for="targetRate">อัตราชนะที่ต้องการ (%) [Target Win Rate]:</label>
+        <input type="number" id="targetRate" value="92.5" step="0.1" min="1" max="99.99">
 
-        <button onclick="runLiveScanPanan()">เริ่มสแกนและปรับแต่งระบบทันที</button>
+        <button class="main-btn" id="runScanBtn" onclick="runLiveScanPanan()">เริ่มสแกนและปรับแต่งระบบทันที</button>
     </div>
 
-    <div class="card">
+    <!-- Live Web Browser Mockup Viewport -->
+    <div class="card" id="browserCard">
+        <div class="card-header-row">
+            <h3>🌐 หน้าจอเว็บเบราว์เซอร์เป้าหมาย (Live Web Browser Viewport)</h3>
+            <span class="status-badge" style="background:#0369a1; color:#38bdf8;">Browser View Active</span>
+        </div>
+
+        <div class="browser-mockup" id="browserMockup">
+            <!-- Window Title Bar & Tabs -->
+            <div class="browser-topbar">
+                <div class="window-controls">
+                    <span class="win-btn win-close" title="Close"></span>
+                    <span class="win-btn win-min" title="Minimize"></span>
+                    <span class="win-btn win-max" title="Maximize"></span>
+                </div>
+                <div class="browser-tabs">
+                    <div class="browser-tab" id="browserTab">
+                        <span class="tab-favicon">🎰</span>
+                        <span class="tab-title" id="browserTabTitle">https://example.com/game-lobby</span>
+                        <span class="tab-close">✕</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Browser Navigation Bar (Omnibox) -->
+            <div class="browser-toolbar">
+                <div class="nav-actions">
+                    <button class="tool-btn" id="btnBack" title="ย้อนกลับ" onclick="historyBack()">←</button>
+                    <button class="tool-btn" id="btnForward" title="ไปข้างหน้า" onclick="historyForward()">→</button>
+                    <button class="tool-btn" id="btnReload" title="โหลดหน้าใหม่" onclick="reloadBrowserFrame()">⟳</button>
+                </div>
+
+                <div class="address-bar-wrapper">
+                    <span class="ssl-icon" title="การเชื่อมต่อปลอดภัย">🔒</span>
+                    <input type="text" id="browserAddressBar" value="https://example.com/game-lobby" placeholder="https://..." onkeydown="handleAddressKey(event)">
+                    <button class="go-btn" id="btnGo" onclick="navigateToAddress()">Go ↵</button>
+                </div>
+
+                <div class="browser-tools">
+                    <div class="mode-toggle">
+                        <button class="tool-toggle active" id="btnDesktop" onclick="setViewportMode('desktop')" title="มุมมองเดสก์ท็อป">💻 PC</button>
+                        <button class="tool-toggle" id="btnMobile" onclick="setViewportMode('mobile')" title="มุมมองมือถือ">📱 Mobile</button>
+                    </div>
+                    <a href="https://example.com/game-lobby" target="_blank" rel="noopener noreferrer" class="tool-btn" id="btnOpenExternal" title="เปิดในแท็บใหม่">↗</a>
+                </div>
+            </div>
+
+            <!-- Integrated AI Calibration HUD -->
+            <div class="browser-ai-hud" id="browserAiHud">
+                <div class="hud-left">
+                    <span class="hud-pulse"></span>
+                    <span>AI Engine Status:</span>
+                    <strong id="hudStatusText" style="color: #38bdf8;">OPTIMIZED_AND_READY</strong>
+                </div>
+                <div class="hud-right">
+                    <span>Effective Win Rate:</span>
+                    <span class="hud-rate-pill" id="hudRatePill">92.5%</span>
+                </div>
+            </div>
+
+            <!-- Screen Frame Container -->
+            <div class="browser-screen-container" id="browserScreenContainer">
+                <iframe id="browserViewportFrame" src="/api/proxy-render?url=https%3A%2F%2Fexample.com%2Fgame-lobby&rate=92.5" title="Live Web Browser Viewport"></iframe>
+            </div>
+
+            <!-- Browser Footer -->
+            <div class="browser-footer">
+                <span id="browserFooterStatus">● สแกน DOM และเชื่อมต่อ Target URL เรียบร้อยแล้ว</span>
+                <span id="browserFooterResolution">Desktop View 100% | Live Render Engine</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Execution Output Log -->
+    <div class="card" id="logCard">
         <h3>ผลลัพธ์การทำงานจริง (Execution Output Log):</h3>
         <pre id="resultLog">ระบบพร้อมทำงาน... กรุณากดปุ่มเพื่อเริ่มกระบวนการ</pre>
     </div>
 </div>
 
 <script>
+function updateBrowserDisplay(url, rate, pageTitle) {
+    const addressBar = document.getElementById('browserAddressBar');
+    const tabTitle = document.getElementById('browserTabTitle');
+    const externalLink = document.getElementById('btnOpenExternal');
+    const frame = document.getElementById('browserViewportFrame');
+    const hudRate = document.getElementById('hudRatePill');
+
+    addressBar.value = url;
+    externalLink.href = url.startsWith('http') ? url : 'https://' + url;
+    if (pageTitle) {
+        tabTitle.innerText = pageTitle;
+    } else {
+        tabTitle.innerText = url.replace(/^https?:\/\//, '');
+    }
+    if (rate) {
+        hudRate.innerText = rate + '%';
+    }
+
+    const proxyUrl = `/api/proxy-render?url=${encodeURIComponent(url)}&rate=${encodeURIComponent(rate || 92.5)}`;
+    frame.src = proxyUrl;
+}
+
+function reloadBrowserFrame() {
+    const frame = document.getElementById('browserViewportFrame');
+    const curSrc = frame.src;
+    frame.src = '';
+    setTimeout(() => { frame.src = curSrc; }, 50);
+}
+
+function historyBack() {
+    try {
+        const frame = document.getElementById('browserViewportFrame');
+        frame.contentWindow.history.back();
+    } catch (e) {
+        console.log("History navigation constrained by sandbox");
+    }
+}
+
+function historyForward() {
+    try {
+        const frame = document.getElementById('browserViewportFrame');
+        frame.contentWindow.history.forward();
+    } catch (e) {
+        console.log("History navigation constrained by sandbox");
+    }
+}
+
+function navigateToAddress() {
+    const addr = document.getElementById('browserAddressBar').value.trim();
+    if (!addr) return;
+    document.getElementById('targetUrl').value = addr;
+    runLiveScanPanan();
+}
+
+function handleAddressKey(e) {
+    if (e.key === 'Enter') {
+        navigateToAddress();
+    }
+}
+
+function setViewportMode(mode) {
+    const container = document.getElementById('browserScreenContainer');
+    const btnDesktop = document.getElementById('btnDesktop');
+    const btnMobile = document.getElementById('btnMobile');
+    const resText = document.getElementById('browserFooterResolution');
+
+    if (mode === 'mobile') {
+        container.classList.add('mobile-mode');
+        btnMobile.classList.add('active');
+        btnDesktop.classList.remove('active');
+        resText.innerText = 'Mobile View (375x540) | Live Render Engine';
+    } else {
+        container.classList.remove('mobile-mode');
+        btnDesktop.classList.add('active');
+        btnMobile.classList.remove('active');
+        resText.innerText = 'Desktop View 100% | Live Render Engine';
+    }
+}
+
 async function runLiveScanPanan() {
-    const url = document.getElementById('targetUrl').value;
+    const url = document.getElementById('targetUrl').value.trim();
     const rate = parseFloat(document.getElementById('targetRate').value);
     const logBox = document.getElementById('resultLog');
+    const hudStatus = document.getElementById('hudStatusText');
+    const footerStatus = document.getElementById('browserFooterStatus');
 
     logBox.innerText = "กำลังส่งคำสั่งสแกนเป้าหมายและเรียกใช้ AI Optimization Engine...";
+    hudStatus.innerText = "Scanning & Calibrating...";
+    footerStatus.innerText = "● กำลังสแกนโครงสร้างหน้าเป้าหมาย " + url;
 
     try {
-        const response = await fetch('http://localhost:8000/api/scan-and-optimize', {
+        const response = await fetch('/api/scan-and-optimize', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ url: url, win_rate: rate })
@@ -56,8 +267,16 @@ async function runLiveScanPanan() {
         
         const data = await response.json();
         logBox.innerText = JSON.stringify(data, null, 2);
+
+        const effectiveRate = (data.calibrated_effective_rate || rate + '%').replace('%', '');
+        hudStatus.innerText = data.status || 'OPTIMIZED_AND_READY';
+        footerStatus.innerText = `● AI Engine: ${data.status || 'OPTIMIZED'} | ตรวจพบ ${data.injection_vector?.length || 0} ช่องอินพุต`;
+
+        updateBrowserDisplay(url, effectiveRate, data.target_url);
     } catch (err) {
-        logBox.innerText = "Error: ไม่สามารถเชื่อมต่อกับ Server Backend ได้\n(โปรดตรวจสอบว่าได้รันคำสั่ง uvicorn api_server:app --reload แล้วหรือยัง)";
+        logBox.innerText = "Error: ไม่สามารถเชื่อมต่อกับ Server Backend ได้\n(โปรดตรวจสอบสถานะการทำงานของระบบ)";
+        hudStatus.innerText = "Connection Error";
+        footerStatus.innerText = "● การเชื่อมต่อขัดข้อง";
     }
 }
 </script>
